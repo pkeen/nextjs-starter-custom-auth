@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
 	if (existingUser.length > 0) {
 		return NextResponse.json(
-			{ error: "User already exists" },
+			{ error: "An account with that email is already registered" },
 			{ status: 400 }
 		);
 	}
