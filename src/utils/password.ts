@@ -24,9 +24,12 @@ export async function hashPassword(password: string): Promise<string> {
  * @returns A boolean indicating whether the password is valid.
  */
 export async function verifyPassword(
-	password: string,
+	password: string | null,
 	hashedPassword: string
 ): Promise<boolean> {
+	if (!password) {
+		return false;
+	}
 	try {
 		const isValid = await bcrypt.compare(password, hashedPassword);
 		return isValid;

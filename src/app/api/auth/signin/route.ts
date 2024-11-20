@@ -17,6 +17,7 @@ export async function POST(req: Request) {
 			throw new Error("User not found");
 		}
 		const isAuthenticated = await verifyPassword(password, user.password);
+		// ^ this is maybe a problem as password can be null
 		console.log(isAuthenticated);
 		if (!isAuthenticated) {
 			throw new Error("Invalid credentials");
