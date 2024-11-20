@@ -33,6 +33,6 @@ export const login = async (previous: unknown, formData: FormData) => {
 			...result,
 			authorized: true,
 		};
-		return result;
+		// return result;
 	}
 };
