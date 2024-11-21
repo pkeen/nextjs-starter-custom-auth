@@ -12,10 +12,10 @@ import truncateTable from "./truncateTable";
 async function resetTables() {
 	for (const table of [
 		schema.users,
-		schema.accounts,
-		schema.sessions,
-		schema.verificationTokens,
-		schema.authenticators,
+		// schema.accounts,
+		// schema.sessions,
+		// schema.verificationTokens,
+		// schema.authenticators,
 	]) {
 		// await db.delete(table); // clear tables without truncating / resetting ids
 		await truncateTable(db, table);

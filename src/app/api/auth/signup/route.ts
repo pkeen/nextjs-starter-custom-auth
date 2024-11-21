@@ -4,6 +4,7 @@ import { findUserByEmail, insertUserAndReturnIt } from "@/lib/db/queries";
 import { validate } from "@/lib/auth/signup/validate";
 import { signToken } from "@/lib/auth/utils/jwt";
 import { createAuthSession } from "@/lib/auth/utils";
+import { AuthResponse } from "@/lib/auth/utils";
 
 export async function POST(req: Request) {
 	try {
@@ -35,12 +36,16 @@ export async function POST(req: Request) {
 		}
 
 		// Step 5: Create Auth Token and Cookie
-		createAuthSession({ id: user.id, email: user.email });
+		// createAuthSession({ id: user.id, email: user.email });
 
-		// // Step 5: Sign a JWT for the new user
-		// const token = signToken({ id: user.id, email: user.email });
+		// Step 5: Sign a JWT for the new user
+		const token = signToken({ id: user.id, email: user.email });
 
 		// // Step 6: Set the token as an HTTP-only cookie
+		return AuthResponse.withCookie(
+			{ message: "User registered successfully" },
+			token
+		);
 
 		// const response = new NextResponse(
 		// 	JSON.stringify({
