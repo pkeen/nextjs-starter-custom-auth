@@ -10,10 +10,11 @@ export const findUserByEmail = async (email: string) => {
 	return user[0];
 };
 
-export const insertUser = async (data: {
+export const insertUserAndReturnIt = async (data: {
 	name: string;
 	email: string;
 	password: string;
 }) => {
-	return await db.insert(users).values(data);
+	const [user] = await db.insert(users).values(data).returning(); // This ensures the inserted record is returned
+	return user;
 };

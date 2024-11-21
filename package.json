@@ -13,8 +13,10 @@
 	"dependencies": {
 		"@neondatabase/serverless": "^0.10.3",
 		"bcryptjs": "^2.4.3",
+		"cookie": "^1.0.2",
 		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.36.3",
+		"jsonwebtoken": "^9.0.2",
 		"next": "15.0.3",
 		"react": "19.0.0-rc-66855b96-20241106",
 		"react-dom": "19.0.0-rc-66855b96-20241106",
@@ -23,7 +25,8 @@
 	"devDependencies": {
 		"@faker-js/faker": "^9.2.0",
 		"@types/bcryptjs": "^2.4.6",
-		"@types/node": "^20",
+		"@types/jsonwebtoken": "^9.0.7",
+		"@types/node": "^20.17.6",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
 		"drizzle-kit": "^0.28.1",

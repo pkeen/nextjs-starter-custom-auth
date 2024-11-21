@@ -46,26 +46,4 @@ export const validate = (data: loginSchema) => {
 	const result = loginSchema.parse(data);
 
 	return result;
-
-	// // Create relevant response object
-	// if (!result.success) {
-	// 	// Zod error handling
-	// 	// Extract errors from result.error
-	// 	const fieldErrors = result.error.flatten().fieldErrors;
-	// 	// Create meaningful feedback
-	// 	const response: response = {
-	// 		validated: false,
-	// 		data: data,
-	// 		errors: fieldErrors,
-	// 	};
-	// 	console.log(response);
-	// 	return response;
-	// } else {
-	// 	// Send response back with success and the data
-	// 	const response: response = {
-	// 		validated: true,
-	// 		data: data,
-	// 	};
-	// 	return response;
-	// }
 };
