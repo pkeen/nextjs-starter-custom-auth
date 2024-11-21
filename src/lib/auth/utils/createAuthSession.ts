@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { signToken } from "./jwt";
-import { setCookie } from "./cookie";
+import { createResponseWithCookie } from "./createResponseWithCookie";
+import { NextResponse } from "next/server";
 
 /**
  * Creates a JWT and sets it as an HTTP-only cookie.
@@ -9,8 +10,9 @@ import { setCookie } from "./cookie";
  * @param options - Optional settings for token creation and cookie attributes.
  */
 export function createAuthSession(
+	data: Record<string, any>,
 	payload: Record<string, any>,
-	key?: string,
+	cookieKey: string = "pk-auth-token",
 	options: {
 		secret?: string;
 		expiresIn?: string | number; // JWT expiration time
@@ -22,13 +24,19 @@ export function createAuthSession(
 			maxAge?: number | string;
 		};
 	} = {}
-): void {
+): NextResponse {
 	// Step 1: Create the JWT
 	const token = signToken(payload, {
 		expiresIn: options.expiresIn,
 		algorithm: options.algorithm,
 	});
 
-	// Step 2: Set the JWT as an HTTP-only cookie
-	setCookie(token, key, options.cookieOptions);
+	return createResponseWithCookie(
+		data,
+		token,
+		cookieKey,
+		options.cookieOptions
+	);
+
+	// Step 2: Set the cookie and return response
 }
