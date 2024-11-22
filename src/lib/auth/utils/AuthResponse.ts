@@ -5,7 +5,7 @@ export class AuthResponse extends NextResponse {
 	 * Sets a token as an HTTP-only cookie.
 	 * @param token - The token to set.
 	 * @param key? - Optional. The name of the cookie.
-	 * @param options? - Cookie options.
+	 * @param options? - Optional Cookie options.
 	 */
 	setCookie(
 		token: string,
@@ -16,7 +16,7 @@ export class AuthResponse extends NextResponse {
 			path?: string;
 			maxAge?: number;
 		} = {}
-	) {
+	): void {
 		const cookieOptions = {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
@@ -54,5 +54,13 @@ export class AuthResponse extends NextResponse {
 		const response = new AuthResponse(JSON.stringify(json), { status });
 		response.setCookie(cookie, cookieKey, cookieOptions);
 		return response;
+	}
+	/**
+	 * Creates an instance of NextResponse.next() as AuthResponse.
+	 * @returns An AuthResponse instance.
+	 */
+	static next(): AuthResponse {
+		const response = NextResponse.next(); // Get the original `NextResponse.next()`
+		return Object.assign(new AuthResponse(), response); // Merge with `AuthResponse`
 	}
 }

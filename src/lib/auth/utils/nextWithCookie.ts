@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
-export function createResponseWithCookie(
-	data: Record<string, any>,
+export function nextWithCookie(
 	token: string,
 	cookieKey: string = "pk-auth-token",
 	cookieOptions: {
@@ -9,10 +8,9 @@ export function createResponseWithCookie(
 		secure?: boolean;
 		path?: string;
 		maxAge?: number;
-	} = {},
-	init: ResponseInit = { status: 200 }
+	} = {}
 ): NextResponse {
-	const response = NextResponse.json(data, init);
+	const response = NextResponse.next();
 	const cookieOptionsWithDefaults = {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { signToken } from "./jwt";
-import { createResponseWithCookie } from "./createResponseWithCookie";
+import { createResponseWithCookie } from "./ResponseWithCookie";
 import { NextResponse } from "next/server";
 
 /**

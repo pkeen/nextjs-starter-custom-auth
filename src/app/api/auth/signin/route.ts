@@ -1,8 +1,6 @@
 import { verifyPassword } from "@/utils/password";
-import { NextRequest, NextResponse } from "next/server";
 import { validate } from "@/lib/auth/signin/validate";
 import { findUserByEmail } from "@/lib/db/queries";
-import { cookies } from "next/headers";
 import { AuthResponse } from "@/lib/auth/utils";
 import { signToken } from "@/lib/auth/utils/jwt";
 
@@ -28,11 +26,11 @@ export async function POST(req: Request) {
 		}
 
 		// Step 4: Sign JWT
-		const token = signToken({ id: user.id, email: user.email });
+		const token = await signToken({ id: user.id, email: user.email });
 
 		return AuthResponse.withCookie({
 			cookie: token,
-			json: { message: "User registered successfully" },
+			json: { message: "Sign in succesful" },
 			status: 201,
 		});
 	} catch (error) {

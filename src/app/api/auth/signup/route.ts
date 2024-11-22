@@ -1,5 +1,4 @@
 import { hashPassword } from "@/utils/password";
-import { NextResponse } from "next/server";
 import { findUserByEmail, insertUserAndReturnIt } from "@/lib/db/queries";
 import { validate } from "@/lib/auth/signup/validate";
 import { signToken } from "@/lib/auth/utils/jwt";
@@ -28,6 +27,7 @@ export async function POST(req: Request) {
 				password: hashedPassword,
 			});
 		} catch (err) {
+			console.error(err);
 			throw new Error("Error inserting user");
 		}
 
@@ -35,7 +35,8 @@ export async function POST(req: Request) {
 		// createAuthSession({ id: user.id, email: user.email });
 
 		// Step 5: Sign a JWT for the new user
-		const token = signToken({ id: user.id, email: user.email });
+		const token = await signToken({ id: user.id, email: user.email });
+        console.log('sign up route: token:', token);
 
 		// // Step 6: Return a response with the JWT attached as cookie
 		return AuthResponse.withCookie({

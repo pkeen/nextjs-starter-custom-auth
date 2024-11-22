@@ -1,8 +1,10 @@
 "use client";
 import { useActionState, useState } from "react";
 import { signIn } from "@/lib/auth/signin/action";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
+	const router = useRouter();
 	// const [data, isPending, action] = useActionState(signIn, undefined);
 	const [formData, setFormData] = useState({
 		email: "",
@@ -37,6 +39,7 @@ export default function SignInForm() {
 			setMessage("Connection Error: Try again later");
 		}
 		setIsPending(false);
+		router.push("/"); // redirect home
 	};
 
 	return (
