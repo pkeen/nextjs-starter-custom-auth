@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 // import { useActionState } from "react";
 // import { login } from "@/lib/auth/login/action";
@@ -118,6 +119,7 @@ export default function SignUpForm() {
 			{/* {data?.errors?.db && (
 				<p className="text-red-500">{data.errors.db}</p>
 			)} */}
+			<Link href="/signin">Already have an account?</Link>
 		</form>
 	);
 }

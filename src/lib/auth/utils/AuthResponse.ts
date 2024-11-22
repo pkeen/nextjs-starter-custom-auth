@@ -30,26 +30,28 @@ export class AuthResponse extends NextResponse {
 
 	/**
 	 * Creates a new ExtendedResponse with JSON data and sets a cookie.
-	 * @param json - The JSON data to include in the response.
-	 * @param cookie - The token to set as a cookie.
-	 * @param cookieKey - (Optional): The name of the cookie.
-	 * @param cookieOptions - (Optional) Cookie options.
-	 * @param init - Additional response options (status, headers, etc.).
+	 * @param options - The options for creating the response.
 	 * @returns An AuthResponse instance.
 	 */
-	static withCookie(
-		json: Record<string, any>,
-		cookie: string,
-		cookieKey: string = "pk-auth-token",
-		cookieOptions: {
+	static withCookie({
+		cookie,
+		json,
+		cookieKey,
+		status = 200,
+		cookieOptions,
+	}: {
+		cookie: string;
+		json?: Record<string, any>;
+		cookieKey?: string;
+		status?: number;
+		cookieOptions?: {
 			httpOnly?: boolean;
 			secure?: boolean;
 			path?: string;
 			maxAge?: number;
-		} = {},
-		init: ResponseInit = { status: 200 }
-	): AuthResponse {
-		const response = new AuthResponse(JSON.stringify(json), init);
+		};
+	}): AuthResponse {
+		const response = new AuthResponse(JSON.stringify(json), { status });
 		response.setCookie(cookie, cookieKey, cookieOptions);
 		return response;
 	}

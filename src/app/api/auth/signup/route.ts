@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { findUserByEmail, insertUserAndReturnIt } from "@/lib/db/queries";
 import { validate } from "@/lib/auth/signup/validate";
 import { signToken } from "@/lib/auth/utils/jwt";
-import { createAuthSession } from "@/lib/auth/utils";
 import { AuthResponse } from "@/lib/auth/utils";
 
 export async function POST(req: Request) {
@@ -14,10 +13,7 @@ export async function POST(req: Request) {
 		// Step 2: Check if user already exists
 		const existingUser = await findUserByEmail(email);
 		if (existingUser) {
-			return NextResponse.json(
-				{ error: "An account with that email is already registered" },
-				{ status: 400 }
-			);
+			throw new Error("An account with that email is already registered");
 		}
 
 		// Step 3: Hash the password
@@ -41,37 +37,23 @@ export async function POST(req: Request) {
 		// Step 5: Sign a JWT for the new user
 		const token = signToken({ id: user.id, email: user.email });
 
-		// // Step 6: Set the token as an HTTP-only cookie
-		return AuthResponse.withCookie(
-			{ message: "User registered successfully" },
-			token
-		);
-
-		// const response = new NextResponse(
-		// 	JSON.stringify({
-		// 		message: "User registered and logged in successfully",
-		// 	}),
-		// 	{ status: 201 }
-		// );
-		// response.cookies.set("auth-token", token, {
-		// 	httpOnly: true,
-		// 	secure: process.env.NODE_ENV === "production",
-		// 	path: "/",
-		// 	maxAge: 3600, // 1 hour
-		// });
-
-		// return response;
-
-		return NextResponse.json(
-			{ message: "User registered successfully" },
-			{ status: 201 }
-		);
+		// // Step 6: Return a response with the JWT attached as cookie
+		return AuthResponse.withCookie({
+			cookie: token,
+			json: { message: "User registered successfully" },
+			status: 201,
+		});
 	} catch (err) {
-		console.error("Error during login:", err);
-
 		const errorMessage =
 			err instanceof Error ? err.message : "An error occurred";
 
-		return NextResponse.json({ message: errorMessage }, { status: 500 });
+		return AuthResponse.withCookie({
+			cookie: "",
+			json: { message: errorMessage },
+			status: 500,
+			cookieOptions: {
+				maxAge: 0,
+			},
+		});
 	}
 }
