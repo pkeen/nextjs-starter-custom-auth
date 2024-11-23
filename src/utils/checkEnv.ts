@@ -4,3 +4,4 @@ import { loadEnv } from "./loadEnv";
 loadEnv();
 
 console.log("DB URL:", process.env.DATABASE_URL);
+console.log("Secret: ", process.env.JWT_SECRET);

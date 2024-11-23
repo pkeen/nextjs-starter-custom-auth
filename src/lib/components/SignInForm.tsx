@@ -39,7 +39,7 @@ export default function SignInForm() {
 			setMessage("Connection Error: Try again later");
 		}
 		setIsPending(false);
-		router.push("/"); // redirect home
+		router.push("/dashboard"); // redirect to dashboard
 	};
 
 	return (

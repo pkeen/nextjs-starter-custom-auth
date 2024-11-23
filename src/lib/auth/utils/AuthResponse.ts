@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import config from "../config";
 
 export class AuthResponse extends NextResponse {
 	/**
@@ -9,7 +10,7 @@ export class AuthResponse extends NextResponse {
 	 */
 	setCookie(
 		token: string,
-		key: string = "pk-auth-token",
+		key: string = `${config.cookies.namePrefix}-token`,
 		options: {
 			httpOnly?: boolean;
 			secure?: boolean;

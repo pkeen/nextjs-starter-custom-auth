@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { secret } from "./key";
 import { SignJWT } from "jose";
+import config from "@/lib/auth/config";
 
 /**
  * Signs a JWT with the given payload and options.
@@ -27,11 +28,11 @@ export const signToken = async (
 	// 	expiresIn: options.expiresIn || "1h",
 	// });
 	const jwt = await new SignJWT(payload)
-		.setProtectedHeader({ alg: "HS256" })
+		.setProtectedHeader({ alg: config.jwtOptions.algorithm })
 		.setIssuedAt()
-		.setIssuer("urn:example:issuer")
-		.setAudience("urn:example:audience")
-		.setExpirationTime("2h")
+		// .setIssuer("urn:example:issuer")
+		// .setAudience("urn:example:audience")
+		.setExpirationTime(config.jwtOptions.expirationTime)
 		.sign(secret);
 
 	return jwt;

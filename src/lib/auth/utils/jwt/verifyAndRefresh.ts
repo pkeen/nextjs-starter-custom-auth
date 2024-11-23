@@ -1,5 +1,6 @@
 import { verifyToken } from "./verifyToken";
 import { signToken } from "./signToken";
+// import { verify } from "./verify";
 
 /**
  * Verifies a JWT and refreshes it if not expired.
@@ -9,8 +10,9 @@ import { signToken } from "./signToken";
 
 export const verifyAndRefresh = async (token: string): Promise<string> => {
 	const { payload } = await verifyToken(token);
+	// const payload = await verify(token);
 
-	// console.log(payload);
+	console.log(payload);
 	// if (payload.exp * 1000 < Date.now()) {
 	//     const newToken = await signToken(payload);
 	//     return newToken;

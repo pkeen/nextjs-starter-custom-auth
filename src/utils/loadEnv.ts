@@ -8,5 +8,7 @@ export async function loadEnv() {
 	}
 	const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 	config({ path: envFile });
-}
 
+	console.log(`🔑 Loaded environment variables from ${envFile}`);
+	console.log("JWT_SECRET", process.env.JWT_SECRET);
+}

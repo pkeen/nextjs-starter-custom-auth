@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import config from "../config";
 
 export function nextWithCookie(
 	token: string,
-	cookieKey: string = "pk-auth-token",
+	cookieKey: string = `${config.cookies.namePrefix}-token`,
 	cookieOptions: {
 		httpOnly?: boolean;
 		secure?: boolean;

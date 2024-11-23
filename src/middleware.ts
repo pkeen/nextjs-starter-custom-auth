@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AuthResponse } from "./lib/auth/utils";
-import { verifyToken, verifyAndRefresh } from "@/lib/auth/utils/jwt";
+import { verifyAndRefresh } from "@/lib/auth/utils/jwt";
+import AuthConfig from "./lib/auth/config";
 
 export function middleware(request: NextRequest) {
-	const token = request.cookies.get("pk-auth-token")?.value;
+	const token = request.cookies.get(
+		`${AuthConfig.cookies.namePrefix}-token`
+	)?.value;
 	// Log middleware activity
 	console.log("Middleware running on:", request.nextUrl.pathname);
 
@@ -15,6 +18,14 @@ export function middleware(request: NextRequest) {
 	return verifyAndRefresh(token)
 		.then((newToken) => {
 			console.log("newToken:", newToken);
+			// If user already signed in, and trying to access /signin, redirect to /dashboard
+			console.log("request.nextUrl.pathname:", request.nextUrl.pathname);
+			if (request.nextUrl.pathname === "/signin") {
+				console.log("signin route: redirecting to /dashboard");
+				return NextResponse.redirect(
+					new URL("/dashboard", request.url)
+				);
+			}
 			const response = AuthResponse.next();
 			response.setCookie(newToken);
 			return response;
@@ -36,11 +47,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-	// matcher: ["/protected-page/:path*"], // Match specific routes
+	matcher: ["/dashboard"], // Match specific routes
 	/*
 	 * Match all routes by default, except the following:
 	 * - Public pages: `/signin`
 	 * - API routes: `/api/public/:path*`
 	 */
-	matcher: ["/((?!_next|static|signin|api/auth|signup|public).*)"], // Protect all except these patterns
+	// matcher: ["/((?!_next|static|api/auth|signup|public).*)"], // Protect all except these patterns
 };
