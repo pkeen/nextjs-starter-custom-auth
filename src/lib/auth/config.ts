@@ -1,3 +1,10 @@
+enum Roles {
+	Admin = "admin",
+	User = "user",
+	Guest = "guest",
+	// Add more roles as needed
+}
+
 const config = {
 	jwtOptions: {
 		algorithm: "HS256",
@@ -7,6 +14,8 @@ const config = {
 	cookies: {
 		namePrefix: "wayward",
 	},
+	roles: Roles,
 };
 
 export default config;
+export { Roles };

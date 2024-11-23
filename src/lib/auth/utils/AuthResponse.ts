@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import config from "../config";
 
+interface CookieOptions {
+	httpOnly?: boolean;
+	secure?: boolean;
+	path?: string;
+	maxAge?: number;
+	sameSite?: "strict" | "lax" | "none" | undefined;
+}
+
 export class AuthResponse extends NextResponse {
 	/**
 	 * Sets a token as an HTTP-only cookie.
@@ -11,22 +19,39 @@ export class AuthResponse extends NextResponse {
 	setCookie(
 		token: string,
 		key: string = `${config.cookies.namePrefix}-token`,
-		options: {
-			httpOnly?: boolean;
-			secure?: boolean;
-			path?: string;
-			maxAge?: number;
-		} = {}
+		options: CookieOptions = {}
 	): void {
-		const cookieOptions = {
+		const cookieOptions: CookieOptions = {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			path: "/",
 			maxAge: 3600,
+			sameSite: "lax",
 			...options,
 		};
-
 		this.cookies.set(key, token, cookieOptions);
+	}
+
+	/**
+	 * Sets a csrf token as an HTTP-only cookie.
+	 * @param csrf - The token to set.
+	 * @param key? - Optional. The name of the cookie.
+	 * @param options? - Optional Cookie options.
+	 */
+	setCsrf(
+		csrf: string,
+		key: string = `${config.cookies.namePrefix}-csrf`,
+		options: CookieOptions = {}
+	): void {
+		const cookieOptions: CookieOptions = {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			path: "/",
+			maxAge: 3600,
+			sameSite: "lax",
+			...options,
+		};
+		this.cookies.set(key, csrf, cookieOptions);
 	}
 
 	/**
@@ -63,5 +88,16 @@ export class AuthResponse extends NextResponse {
 	static next(): AuthResponse {
 		const response = NextResponse.next(); // Get the original `NextResponse.next()`
 		return Object.assign(new AuthResponse(), response); // Merge with `AuthResponse`
+	}
+
+	/**
+	 * Create a JSON response with the AuthResponse type.
+	 * @param body - The body of the JSON response.
+	 * @param init - Optional initialization options for the response.
+	 * @returns An instance of AuthResponse with the JSON body.
+	 */
+	static json<JsonBody>(body: JsonBody, init?: ResponseInit) {
+		const response = NextResponse.json(body, init); // Create a NextResponse
+		return Object.assign(new AuthResponse(), response); // Set the prototype to AuthResponse
 	}
 }

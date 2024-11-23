@@ -3,6 +3,7 @@ import { validate } from "@/lib/auth/signin/validate";
 import { findUserByEmail } from "@/lib/db/queries";
 import { AuthResponse } from "@/lib/auth/utils";
 import { signToken } from "@/lib/auth/utils/jwt";
+import { generateCsrf } from "@/lib/auth/utils/csrf";
 
 export async function POST(req: Request) {
 	try {
@@ -28,11 +29,17 @@ export async function POST(req: Request) {
 		// Step 4: Sign JWT
 		const token = await signToken({ id: user.id, email: user.email });
 
-		return AuthResponse.withCookie({
-			cookie: token,
-			json: { message: "Sign in succesful" },
-			status: 201,
-		});
+		// Step 5: create a csrf token
+		const csrf = generateCsrf();
+
+		// Step 6: Create an AuthResponse with a cookie and csrf
+		const res = AuthResponse.json(
+			{ message: "Sign in successful" },
+			{ status: 201 }
+		);
+		res.setCookie(token);
+		res.setCsrf(csrf);
+		return res;
 	} catch (error) {
 		const errorMessage =
 			error instanceof Error ? error.message : "An error occurred";
