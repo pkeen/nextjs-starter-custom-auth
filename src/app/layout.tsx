@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { CsrfProvider } from "@/context/CsrfContext";
+import Link from "next/link";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -28,8 +30,12 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<h1>Next Custom Auth</h1>
-				{children}
+				<CsrfProvider>
+					<Link href="/">Next Custom Auth</Link>-
+					<Link href="/dashboard">Dashboard</Link>-
+					<Link href="/auth/signin">Login</Link>
+					{children}
+				</CsrfProvider>
 			</body>
 		</html>
 	);

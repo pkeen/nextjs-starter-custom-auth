@@ -1,13 +1,9 @@
 import { AuthResponse } from "@/lib/auth/utils";
 
 export async function POST() {
-	// Destroy the session
-	return AuthResponse.withCookie({
-		cookie: "",
-		json: { message: "Signed out successfully" },
-		status: 200,
-		cookieOptions: {
-			maxAge: 0,
-		},
-	});
+	const response = AuthResponse.json({ message: "Signed out" });
+	// Destroy the auth token
+	response.destroyCookie();
+	response.destroyCsrf();
+	return response;
 }

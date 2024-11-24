@@ -34,11 +34,11 @@ export async function POST(req: Request) {
 
 		// Step 6: Create an AuthResponse with a cookie and csrf
 		const res = AuthResponse.json(
-			{ message: "Sign in successful" },
+			{ message: "Sign in successful", csrf }, // add csrf to the response
 			{ status: 201 }
 		);
 		res.setCookie(token);
-		res.setCsrf(csrf);
+		// res.setCsrf(csrf);
 		return res;
 	} catch (error) {
 		const errorMessage =

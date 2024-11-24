@@ -3,6 +3,11 @@ import { AuthResponse } from "./lib/auth/utils";
 import { verifyAndRefresh } from "@/lib/auth/utils/jwt";
 import AuthConfig from "./lib/auth/config";
 
+// // for testing wo middle ware
+// export function middleware(request: NextRequest) {
+// 	return NextResponse.next();
+// }
+
 export function middleware(request: NextRequest) {
 	const token = request.cookies.get(
 		`${AuthConfig.cookies.namePrefix}-token`
@@ -32,7 +37,7 @@ export function middleware(request: NextRequest) {
 		})
 		.catch((error) => {
 			console.error("error:", error);
-			return NextResponse.redirect(new URL("/signin", request.url));
+			return NextResponse.redirect(new URL("/auth/signin", request.url));
 		}); // Redirect to login if token is invalid
 
 	// return verifyToken(token)

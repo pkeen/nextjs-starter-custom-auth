@@ -32,6 +32,10 @@ export class AuthResponse extends NextResponse {
 		this.cookies.set(key, token, cookieOptions);
 	}
 
+	destroyCookie(key: string = `${config.cookies.namePrefix}-token`): void {
+		this.cookies.set(key, "", { maxAge: 0 });
+	}
+
 	/**
 	 * Sets a csrf token as an HTTP-only cookie.
 	 * @param csrf - The token to set.
@@ -52,6 +56,10 @@ export class AuthResponse extends NextResponse {
 			...options,
 		};
 		this.cookies.set(key, csrf, cookieOptions);
+	}
+
+	destroyCsrf(key: string = `${config.cookies.namePrefix}-csrf`): void {
+		this.cookies.set(key, "", { maxAge: 0 });
 	}
 
 	/**
@@ -98,6 +106,11 @@ export class AuthResponse extends NextResponse {
 	 */
 	static json<JsonBody>(body: JsonBody, init?: ResponseInit) {
 		const response = NextResponse.json(body, init); // Create a NextResponse
+		return Object.assign(new AuthResponse(), response); // Set the prototype to AuthResponse
+	}
+
+	static error<JsonBody>(body: JsonBody, init?: ResponseInit) {
+		const response = NextResponse.json(body, { status: 400, ...init }); // Create a NextResponse
 		return Object.assign(new AuthResponse(), response); // Set the prototype to AuthResponse
 	}
 }
