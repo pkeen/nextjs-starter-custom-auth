@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 			throw new Error("Invalid credentials");
 		}
 
-		// Step 4: Sign JWT
+		// Step 4: Sign Access JWT
 		const token = await signToken({ id: user.id, email: user.email });
 
 		// Step 5: create a csrf token
