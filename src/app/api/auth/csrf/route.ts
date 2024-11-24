@@ -6,7 +6,7 @@ import AuthConfig from "@/lib/auth/config";
 export async function GET() {
 	const csrf = generateCsrf();
 
-	const res = AuthResponse.json({ csrf });
+	const res = AuthResponse.withJson({ csrf });
 
 	res.setCsrf(csrf);
 
@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
 			throw new Error("Invalid CSRF token");
 		}
 
-		return AuthResponse.json({ message: "CSRF token verified" });
+		return AuthResponse.withJson({ message: "CSRF token verified" });
 	} catch (error) {
 		console.error("error:", error);
-		return AuthResponse.error({ message: "Invalid CSRF token" });
+		return AuthResponse.withError({ message: "Invalid CSRF token" });
 	}
 }

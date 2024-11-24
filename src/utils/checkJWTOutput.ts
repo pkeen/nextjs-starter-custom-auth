@@ -25,6 +25,8 @@ async function main() {
 		return result;
 	});
 
+	return decoded;
+
 	// console.log("payload:", payload);
 }
 

@@ -17,6 +17,9 @@ export async function POST(req: Request) {
 		}
 
 		// Step 3: Verify password
+		if (!user.password) {
+			throw new Error("User password is missing");
+		}
 		const isAuthenticated = await verifyPassword(password, user.password);
 		if (!isAuthenticated) {
 			// return NextResponse.json(
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
 		const csrf = generateCsrf();
 
 		// Step 6: Create an AuthResponse with a cookie and csrf
-		const res = AuthResponse.json(
+		const res = AuthResponse.withJson(
 			{ message: "Sign in successful", csrf }, // add csrf to the response
 			{ status: 201 }
 		);

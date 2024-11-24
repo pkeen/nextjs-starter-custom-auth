@@ -104,13 +104,27 @@ export class AuthResponse extends NextResponse {
 	 * @param init - Optional initialization options for the response.
 	 * @returns An instance of AuthResponse with the JSON body.
 	 */
-	static json<JsonBody>(body: JsonBody, init?: ResponseInit) {
+	static withJson<JsonBody>(
+		body: JsonBody,
+		init?: ResponseInit
+	): AuthResponse {
 		const response = NextResponse.json(body, init); // Create a NextResponse
-		return Object.assign(new AuthResponse(), response); // Set the prototype to AuthResponse
+		Object.setPrototypeOf(response, AuthResponse.prototype); // Set the prototype
+		return response as AuthResponse; // Explicitly cast the type
 	}
 
-	static error<JsonBody>(body: JsonBody, init?: ResponseInit) {
-		const response = NextResponse.json(body, { status: 400, ...init }); // Create a NextResponse
-		return Object.assign(new AuthResponse(), response); // Set the prototype to AuthResponse
+	/**
+	 * Create an error response with the AuthResponse type.
+	 * @param body - The body of the error response.
+	 * @param init - Optional initialization options for the response.
+	 * @returns An instance of AuthResponse with the JSON body.
+	 */
+	static withError<JsonBody>(body: JsonBody, init?: ResponseInit) {
+		const response = new NextResponse(JSON.stringify(body), {
+			status: 400,
+			...init,
+		});
+		Object.setPrototypeOf(response, AuthResponse.prototype); // Set the prototype
+		return response as AuthResponse; // Explicitly cast the type
 	}
 }

@@ -1,1 +1,0 @@
-export { setCookie } from "./setCookie";

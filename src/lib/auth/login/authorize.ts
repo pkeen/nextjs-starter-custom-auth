@@ -1,5 +1,5 @@
 "use server";
-import { hashPassword, verifyPassword } from "@/utils/password";
+import { verifyPassword } from "@/utils/password";
 import db from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -30,6 +30,9 @@ export const authorize = async (credentials: credentials) => {
 			.where(eq(users.email, email));
 		if (!user) {
 			throw new Error("No user found");
+		}
+		if (!user.password) {
+			throw new Error("No password found for user");
 		}
 		const authenticated = await verifyPassword(password, user.password);
 		if (!authenticated) {

@@ -3,9 +3,7 @@ import SignOutButton from "@/lib/components/SignOutButton";
 import CsrfText from "@/lib/components/Testing/CsrfText";
 import CsrfRequiredButton from "@/lib/components/Testing/CsrfRequiredButton";
 
-type Props = {};
-
-const page = (props: Props) => {
+const page = () => {
 	return (
 		<div>
 			<h1>Dashboard</h1>
