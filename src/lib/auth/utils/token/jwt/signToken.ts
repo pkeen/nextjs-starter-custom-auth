@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { secret } from "./key";
 import { SignJWT } from "jose";
-import config from "@/lib/auth/config";
 
 /**
  * Signs a JWT with the given payload and options.
@@ -12,27 +11,19 @@ import config from "@/lib/auth/config";
 
 export const signToken = async (
 	payload: Record<string, any>,
-	options: { expiresIn?: string | number; algorithm?: jwt.Algorithm } = {}
+	options: { expiresIn: string | number; algorithm: string }
 ): Promise<string> => {
 	// const secretOrPrivateKey =
 	// 	options.algorithm && options.algorithm.startsWith("RS")
 	// 		? process.env.JWT_PRIVATE_KEY // Asymmetric key
 	// 		: process.env.JWT_SECRET; // Symmetric key
 
-	// if (!secretOrPrivateKey) {
-	// 	throw new Error("Missing secret or private key for signing the token.");
-	// }
-
-	// return jwt.sign(payload, secretOrPrivateKey, {
-	// 	algorithm: options.algorithm || "HS256", // Default to HS256
-	// 	expiresIn: options.expiresIn || "1h",
-	// });
 	const jwt = await new SignJWT(payload)
-		.setProtectedHeader({ alg: config.jwtOptions.algorithm })
+		.setProtectedHeader({ alg: options.algorithm || "HS256" })
 		.setIssuedAt()
 		// .setIssuer("urn:example:issuer")
 		// .setAudience("urn:example:audience")
-		.setExpirationTime(config.jwtOptions.expirationTime)
+		.setExpirationTime(options.expiresIn || "1h")
 		.sign(secret);
 
 	return jwt;

@@ -1,7 +1,11 @@
 // export { createAuthSession } from "./createAuthSession";
-export { AuthResponse } from "./AuthResponse";
-export { nextWithCookie } from "./nextWithCookie";
-export { ResponseWithCookie } from "./ResponseWithCookie";
-export { ResponseWithCsrf } from "./ResponseWithCsrf";
-export * as jwt from "./jwt";
+export { AuthResponse } from "./response/AuthResponse";
+export { nextWithCookie } from "./response/nextWithCookie";
+export { ResponseWithCookie } from "./response/ResponseWithCookie";
+export { ResponseWithCsrf } from "./response/ResponseWithCsrf";
+export * as jwt from "./token/jwt";
 export * as csrf from "./csrf";
+export * as accessToken from "./token";
+export * as token from "./token";
+export { authClient } from "./axios/authClient";
+export { publicClient } from "./axios/publicClient";

@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth/utils";
+import { useAccessToken } from "@/context/AuthContext/AccessTokenContext";
+import { useCsrfToken } from "@/context/AuthContext/CsrfTokenContext";
 
 export default function SignInForm() {
 	const router = useRouter();
@@ -12,6 +15,8 @@ export default function SignInForm() {
 	const [isPending, setIsPending] = useState(false);
 	const [errors, setErrors] = useState({});
 	const [message, setMessage] = useState("");
+	const { accessToken, setAccessToken } = useAccessToken();
+	const { csrfToken, setCsrfToken } = useCsrfToken();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({
@@ -20,25 +25,42 @@ export default function SignInForm() {
 		});
 	};
 
+	// const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	// 	e.preventDefault();
+	// 	setIsPending(true);
+	// 	try {
+	// 		const result = await fetch("/api/auth/signin", {
+	// 			method: "POST",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 			},
+	// 			body: JSON.stringify(formData),
+	// 		});
+	// 		const data = await result.json();
+	// 		setMessage(data.message);
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 		setMessage("Connection Error: Try again later");
+	// 	}
+	// 	setIsPending(false);
+	// 	router.push("/dashboard"); // redirect to dashboard
+	// };
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		// using Axios
 		e.preventDefault();
 		setIsPending(true);
 		try {
-			const result = await fetch("/api/auth/signin", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-			const data = await result.json();
-			setMessage(data.message);
+			const response = await authClient.post("/auth/signin", formData);
+			setMessage(response.data.message);
+			// setMessage(data.message);
+			setIsPending(false);
+			setAccessToken(response.data.accessToken);
+			router.push("/dashboard"); // redirect to dashboard
 		} catch (error) {
 			console.error(error);
 			setMessage("Connection Error: Try again later");
 		}
-		setIsPending(false);
-		router.push("/dashboard"); // redirect to dashboard
 	};
 
 	return (

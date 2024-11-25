@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
-import config from "../config";
+import config from "../../config";
+
+/*
+ * Sets a Csrf token as an HTTP-only cookie.
+ * @param response - A response object.
+ * @param token - The token to set.
+ * @param key? - Optional. The name of the cookie.
+ * @param options? - Optional Cookie options.
+ */
 
 interface CookieOptions {
 	httpOnly?: boolean;
@@ -9,14 +17,14 @@ interface CookieOptions {
 	sameSite?: "strict" | "lax" | "none" | undefined;
 }
 
-export function ResponseWithCsrf(
+export function addCsrf(
+	response: NextResponse,
 	csrf: string,
-	data: any,
 	cookieKey: string = `${config.cookies.namePrefix}-token`,
-	cookieOptions: CookieOptions = {},
-	init: ResponseInit = { status: 200 }
+	cookieOptions: CookieOptions = {}
 ): NextResponse {
-	const response = NextResponse.json(data, init);
+	// const response = NextResponse.json(data, init);
+	// not needed as supplied as an argument
 	const cookieOptionsWithDefaults: CookieOptions = {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",

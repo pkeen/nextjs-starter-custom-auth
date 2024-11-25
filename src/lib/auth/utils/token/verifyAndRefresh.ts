@@ -1,5 +1,6 @@
-import { verifyToken } from "./verifyToken";
-import { signToken } from "./signToken";
+import { verifyToken } from "./jwt/verifyToken";
+import { signToken } from "./jwt/signToken";
+import { sign } from "@/lib/auth/utils/token";
 // import { verify } from "./verify";
 
 /**
@@ -17,7 +18,7 @@ export const verifyAndRefresh = async (token: string): Promise<string> => {
 	//     const newToken = await signToken(payload);
 	//     return newToken;
 	// }
-	token = await signToken(payload);
+	token = await sign("access", payload);
 
 	return token;
 };

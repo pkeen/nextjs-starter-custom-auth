@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import config from "../config";
+import config from "../../config";
 
 export function ResponseWithCookie(
 	data: Record<string, any>,

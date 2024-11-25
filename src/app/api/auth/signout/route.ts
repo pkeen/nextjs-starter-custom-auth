@@ -1,9 +1,15 @@
 import { AuthResponse } from "@/lib/auth/utils";
 
 export async function POST() {
-	const response = AuthResponse.withJson({ message: "Signed out" });
-	// Destroy the auth token
-	response.destroyCookie();
-	response.destroyCsrf();
-	return response;
+	try {
+		const response = AuthResponse.withJson({ message: "Signed out" });
+		// Destroy the refresh token
+		response.destroyCookie();
+		response.destroyCsrf();
+		return response;
+	} catch (error) {
+		const errorMessage =
+			error instanceof Error ? error.message : "An error occurred";
+		return AuthResponse.withError(errorMessage);
+	}
 }

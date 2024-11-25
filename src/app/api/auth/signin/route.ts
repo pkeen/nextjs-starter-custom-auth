@@ -2,8 +2,9 @@ import { verifyPassword } from "@/utils/password";
 import { validate } from "@/lib/auth/signin/validate";
 import { findUserByEmail } from "@/lib/db/queries";
 import { AuthResponse } from "@/lib/auth/utils";
-import { signToken } from "@/lib/auth/utils/jwt";
+// import { signToken } from "@/lib/auth/utils/token/jwt";
 import { generateCsrf } from "@/lib/auth/utils/csrf";
+import { token } from "@/lib/auth/utils";
 
 export async function POST(req: Request) {
 	try {
@@ -29,19 +30,28 @@ export async function POST(req: Request) {
 			throw new Error("Invalid credentials");
 		}
 
-		// Step 4: Sign Access JWT
-		const token = await signToken({ id: user.id, email: user.email });
+		// Step 4: Sign Refresh Token
+		const refreshToken = await token.sign("refresh", {
+			id: user.id,
+			email: user.email,
+		});
+
+		// Step 4: Sign Access Token
+		const accessToken = await token.sign("access", {
+			id: user.id,
+			email: user.email,
+		});
 
 		// Step 5: create a csrf token
 		const csrf = generateCsrf();
 
 		// Step 6: Create an AuthResponse with a cookie and csrf
 		const res = AuthResponse.withJson(
-			{ message: "Sign in successful", csrf }, // add csrf to the response
+			{ message: "Sign in successful", accessToken, csrf }, // add csrf to the response
 			{ status: 201 }
 		);
-		res.setCookie(token);
-		// res.setCsrf(csrf);
+		res.setCookie(refreshToken);
+		res.setCsrf(csrf);
 		return res;
 	} catch (error) {
 		const errorMessage =

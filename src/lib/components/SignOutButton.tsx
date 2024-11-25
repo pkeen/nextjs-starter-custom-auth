@@ -1,22 +1,18 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useCsrfToken } from "@/context/CsrfContext";
+import { useCsrfToken } from "@/context/AuthContext/CsrfTokenContext";
+import { authClient } from "../auth/utils";
+import { useAccessToken } from "@/context/AuthContext/AccessTokenContext";
 
 export default function SignOutButton() {
-	const csrfToken = useCsrfToken();
 	const router = useRouter();
+	const { setAccessToken } = useAccessToken();
 	const handleClick = async () => {
-		const response = await fetch("/api/auth/signout", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-
-		if (response.ok) {
-			console.log("Sign out successful");
-		} else {
+		try {
+			const response = await authClient.post("/auth/signout");
+			setAccessToken(null);
+		} catch (error) {
 			console.error("Sign out failed");
 		}
 

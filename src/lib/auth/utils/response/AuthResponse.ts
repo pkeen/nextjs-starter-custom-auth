@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import config from "../config";
+import config from "../../config";
 
 interface CookieOptions {
 	httpOnly?: boolean;

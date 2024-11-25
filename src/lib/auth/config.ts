@@ -7,15 +7,22 @@ enum Roles {
 
 const config = {
 	jwtOptions: {
-		algorithm: "HS256",
+		access: {
+			algorithm: "HS256",
+			expiresIn: "10 seconds",
+		},
+		refresh: {
+			algorithm: "HS256",
+			expiresIn: "30 days",
+		},
 		// maxTokenAge: "1h", // thats on the verifyToken side
-		expirationTime: "10 seconds",
 	},
 	cookies: {
-		namePrefix: "wayward",
+		namePrefix: "pk-auth",
 	},
 	roles: Roles,
 };
 
 export default config;
+
 export { Roles };

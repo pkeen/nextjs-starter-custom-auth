@@ -1,5 +1,5 @@
 "use client";
-import { useCsrfToken } from "@/context/CsrfContext";
+import { useCsrfToken } from "@/context/AuthContext/CsrfTokenContext";
 
 const CsrfRequiredButton = () => {
 	const csrfToken = useCsrfToken();
