@@ -36,8 +36,6 @@ export async function POST(request: NextRequest) {
 			throw new Error("Payload is missing");
 		}
 
-		// Step ?: Verify CSRF token matches
-
 		// Step 4: Refresh Access Token
 		// 4a. Create the format for the new access token
 		// create a payload creator function that takes in either an old payload or a user object from db

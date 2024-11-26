@@ -1,5 +1,5 @@
 "use server";
-import { verifyPassword } from "@/utils/password";
+import { verifyPassword } from "@/lib/auth/utils/password/password";
 import db from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";

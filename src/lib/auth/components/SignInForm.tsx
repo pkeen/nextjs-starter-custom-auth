@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth/utils";
-import { useAccessToken } from "@/context/AuthContext/AccessTokenContext";
-import { useCsrfToken } from "@/context/AuthContext/CsrfTokenContext";
+import { useAccessToken } from "@/lib/auth/context/AuthContext/AccessTokenContext";
+import { useCsrfToken } from "@/lib/auth/context/AuthContext/CsrfTokenContext";
 
 export default function SignInForm() {
 	const router = useRouter();

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { CsrfTokenProvider } from "@/context/AuthContext/CsrfTokenContext";
-import { AccessTokenProvider } from "@/context/AuthContext/AccessTokenContext";
+// import { CsrfTokenProvider } from "@/context/AuthContext/CsrfTokenContext";
+// import { AccessTokenProvider } from "@/context/AuthContext/AccessTokenContext";
+import AuthProvider from "@/lib/auth/context/AuthContext/AuthProvider";
 import Link from "next/link";
 
 const geistSans = localFont({
@@ -31,14 +32,12 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<CsrfTokenProvider>
-					<AccessTokenProvider>
-						<Link href="/">Next Custom Auth</Link>-
-						<Link href="/dashboard">Dashboard</Link>-
-						<Link href="/auth/signin">Login</Link>
-						{children}
-					</AccessTokenProvider>
-				</CsrfTokenProvider>
+				<AuthProvider>
+					<Link href="/">Next Custom Auth</Link>-
+					<Link href="/dashboard">Dashboard</Link>-
+					<Link href="/auth/signin">Login</Link>
+					{children}
+				</AuthProvider>
 			</body>
 		</html>
 	);

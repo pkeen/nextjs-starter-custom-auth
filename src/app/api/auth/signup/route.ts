@@ -1,8 +1,9 @@
-import { hashPassword } from "@/utils/password";
+import { hashPassword } from "@/lib/auth/utils/password/password";
 import { findUserByEmail, insertUserAndReturnIt } from "@/lib/db/queries";
-import { validate } from "@/lib/auth/signup/validate";
-import { signToken } from "@/lib/auth/utils/token/jwt";
+import { validate } from "@/lib/auth/actions/signup/validate";
+import { token } from "@/lib/auth/utils";
 import { AuthResponse } from "@/lib/auth/utils";
+import { generateCsrf } from "@/lib/auth/utils/csrf";
 
 export async function POST(req: Request) {
 	try {
@@ -31,19 +32,28 @@ export async function POST(req: Request) {
 			throw new Error("Error inserting user");
 		}
 
-		// Step 5: Create Auth Token and Cookie
-		// createAuthSession({ id: user.id, email: user.email });
-
-		// Step 5: Sign a JWT for the new user
-		const token = await signToken({ id: user.id, email: user.email });
-		console.log("sign up route: token:", token);
-
-		// // Step 6: Return a response with the JWT attached as cookie
-		return AuthResponse.withCookie({
-			cookie: token,
-			json: { message: "User registered successfully" },
-			status: 201,
+		// Step 4: Sign Refresh Token
+		const refreshToken = await token.sign("refresh", {
+			id: user.id,
+			email: user.email,
 		});
+
+		// Step 4: Sign Access Token
+		const accessToken = await token.sign("access", {
+			id: user.id,
+			email: user.email,
+		});
+
+		// Step 6: create a csrf token
+		const csrf = generateCsrf();
+
+		// Step 7: Create an AuthResponse with a cookie and csrf
+		const res = AuthResponse.withJson(
+			{ message: "Sign in successful", accessToken, csrf }, // add csrf to the response
+			{ status: 201 }
+		);
+		res.setCookie(refreshToken);
+		res.setCsrf(csrf);
 	} catch (err) {
 		const errorMessage =
 			err instanceof Error ? err.message : "An error occurred";

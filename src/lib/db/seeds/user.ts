@@ -1,7 +1,7 @@
 import type { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { faker } from "@faker-js/faker";
-import { hashPassword } from "@/utils/password";
+import { hashPassword } from "@/lib/auth/utils/password/password";
 
 const seedUsers = async (db: db) => {
 	const spoofUserArray = [];

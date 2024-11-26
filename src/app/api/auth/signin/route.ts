@@ -1,8 +1,7 @@
-import { verifyPassword } from "@/utils/password";
-import { validate } from "@/lib/auth/signin/validate";
+import { password as authPassword } from "@/lib/auth/utils";
+import { validate } from "@/lib/auth/actions/signin/validate";
 import { findUserByEmail } from "@/lib/db/queries";
 import { AuthResponse } from "@/lib/auth/utils";
-// import { signToken } from "@/lib/auth/utils/token/jwt";
 import { generateCsrf } from "@/lib/auth/utils/csrf";
 import { token } from "@/lib/auth/utils";
 
@@ -21,7 +20,10 @@ export async function POST(req: Request) {
 		if (!user.password) {
 			throw new Error("User password is missing");
 		}
-		const isAuthenticated = await verifyPassword(password, user.password);
+		const isAuthenticated = await authPassword.verify(
+			password,
+			user.password
+		);
 		if (!isAuthenticated) {
 			// return NextResponse.json(
 			// 	{ message: "Invalid credentials" },
