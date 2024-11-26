@@ -1,7 +1,7 @@
 "use server";
 import { verifyPassword } from "@/lib/auth/utils/password/password";
-import db from "@/lib/db";
-import { users } from "@/lib/db/schema";
+import db from "@/lib/auth/db";
+import { users } from "@/lib/auth/db/schema";
 import { eq } from "drizzle-orm";
 
 // let testUser = {

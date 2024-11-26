@@ -3,9 +3,9 @@
 // Load environment variables
 // loadEnv();
 
-import db from "@/lib/db";
-import * as seeds from "@/lib/db/seeds";
-import * as schema from "@/lib/db/schema";
+import db from "@/lib/auth/db";
+import * as seeds from "@/lib/auth/db/seeds";
+import * as schema from "@/lib/auth/db/schema";
 import truncateTable from "./truncateTable";
 
 // Function to reset all the tables

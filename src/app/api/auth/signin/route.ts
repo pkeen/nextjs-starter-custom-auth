@@ -1,6 +1,6 @@
 import { password as authPassword } from "@/lib/auth/utils";
 import { validate } from "@/lib/auth/actions/signin/validate";
-import { findUserByEmail } from "@/lib/db/queries";
+import { findUserByEmail } from "@/lib/auth/db/queries";
 import { AuthResponse } from "@/lib/auth/utils";
 import { generateCsrf } from "@/lib/auth/utils/csrf";
 import { token } from "@/lib/auth/utils";

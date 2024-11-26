@@ -1,5 +1,5 @@
 import { hashPassword } from "@/lib/auth/utils/password/password";
-import { findUserByEmail, insertUserAndReturnIt } from "@/lib/db/queries";
+import { findUserByEmail, insertUserAndReturnIt } from "@/lib/auth/db/queries";
 import { validate } from "@/lib/auth/actions/signup/validate";
 import { token } from "@/lib/auth/utils";
 import { AuthResponse } from "@/lib/auth/utils";
